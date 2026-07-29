@@ -1,0 +1,55 @@
+Ticket Buyer Commands
+
+Start Microsoft Edge with remote debugging using:
+& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --remote-debugging-port=9222 --user-data-dir="C:\Users\titus\Downloads\test\.edge-ticket-profile"
+
+Login first, then run the commands below from this folder.
+
+
+
+
+Use these in PowerShell from this folder:
+
+1. 1 person, no priority
+
+```powershell
+python ticketbuyer.py browser-watch --debugger-address 127.0.0.1:9222 --auto-select --auto-advance --pair-size 1 --poll-seconds 0.2
+```
+
+2. 1 person, with priority section
+
+```powershell
+python ticketbuyer.py browser-watch --debugger-address 127.0.0.1:9222 --auto-select --auto-advance --pair-size 1 --preferred-sections 298 --only-preferred-sections --poll-seconds 0.2 --max-cycles 999999
+```
+
+3. 2 people, no priority
+
+python ticketbuyer.py browser-watch --debugger-address 127.0.0.1:9222 --auto-select --auto-advance --pair-size 2 --poll-seconds 0.2
+
+
+4. 2 people, with priority section
+
+```powershell
+python ticketbuyer.py browser-watch --debugger-address 127.0.0.1:9222 --auto-select --auto-advance --pair-size 2 --preferred-sections 420,404 --manual-section-fallback --poll-seconds 0.2 --max-cycles 999999
+
+```
+
+5. 3 people
+
+
+python ticketbuyer.py browser-watch --debugger-address 127.0.0.1:9222 --auto-select --auto-advance --pair-size 3 --poll-seconds 0.5
+
+
+Notes
+
+- `--preferred-sections 420,404 --manual-section-fallback` makes the bot try those preferred zones first. If they do not work, it waits for you to click the next section manually, then it auto-finds matching seats.
+- Keep `--manual-section-fallback` on when you do not want the bot jumping into Cat 4, Cat 3, Cat 2, or Cat 1 by itself.
+- Use `--allowed-sections 420,419,409,408,404` instead if you want the bot to auto-cycle only through Cat 5 fallback sections.
+- `--preferred-sections 298 --only-preferred-sections` makes the bot search only zone 298 and wait instead of falling back to another zone.
+- `--lean-browser` helps only when the script launches Edge itself. It disables extensions and some background browser features to reduce overhead.
+- `--lean-browser` does not turn off extensions in an already running Edge attached with `--debugger-address`.
+- For the cleanest setup, use a dedicated Edge profile with `--user-data-dir` and `--lean-browser` instead of your everyday browser profile.
+- The preferred section examples may not match every event. Use the section IDs shown by the script on the zone page.
+- Remove `--auto-advance` if you want it to select seats but not press `Book Now`.
+- By default the script will switch to a detected booking tab like `zones.php` or `fixed.php` and start scanning automatically once that tab reaches the zone/seat page.
+- Add `--confirm-start` if you want it to stop and wait for Enter before scanning starts.
